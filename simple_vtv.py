@@ -7,36 +7,41 @@ import uuid
 from pathlib import Path
 
 
-def voice_to_voice(audio_file):
-    """_summary_
+def voice_to_voice(audio_file, input_lang, output_lang):
+    """
+    Transcribes audio, translate itm and convert it to speech in a specified language
 
     Args:
-        audio_file (_type_): _description_
+        audio_file (): _description_
+        input_lang ():
+        output_lang ():
 
     Raises:
         gr.Error: _description_
     """
-    transcription_response = audio_transcription(audio_file)
+    input_lang_code = LANGUAGE_CODES[input_lang]
+    output_lang_code = LANGUAGE_CODES[output_lang]
+        
+    transcription_response = audio_transcription(audio_file, input_lang_code)
     
     if transcription_response.status == aai.TranscriptStatus.error:
         raise gr.Error(transcription_response.error)
     else:
         text = transcription_response.text
     
-    ja_translation = text_translation(text)
+    translated_text = text_translation(text, input_lang_code, output_lang_code)
     
-    ja_audi_path = text_to_speech(ja_translation)
+    output_audi_path = text_to_speech(translated_text, output_lang_code)
     
-    ja_path = Path(ja_audi_path)
-    
-    return ja_path
+    return Path(output_audi_path)
 
 
-def audio_transcription(audio_file):
+def audio_transcription(audio_file, lang_code="en"):
     """Transcribe speech in audio file to text using AssemblyAI
 
     Args:
         audio_file (_type_): _description_
+        lang_code (str): 
 
     Returns:
         str: Transcribed text from the audio file
@@ -49,22 +54,24 @@ def audio_transcription(audio_file):
     return transcription
 
 
-def text_translation(text):
+def text_translation(text, from_lang="en", to_lang="ja"):
     """Translate English text to Japanese
 
     Args:
-        text (str): given text in English
+        text (str): Text to translate.
+        from_lang (str): Language code of the source language.
+        to_lang (str): Language code of the target language.
 
     Returns:
         str: translateed text in Japanese
     """
-    translator_ja = Translator(from_lang="en", to_lang="ja")
-    ja_text = translator_ja.translate(text)
+    translator = Translator(from_lang=from_lang, to_lang=to_lang)
+    translator_text = translator.translate(text)
     
-    return ja_text
+    return translator_text
 
 
-def text_to_speech(text):
+def text_to_speech(text, lang_code="ja"):
 
     client = ElevenLabs(
         api_key = "",
@@ -101,11 +108,33 @@ audio_input = gr.Audio(
     type="filepath"
 )
 
+LANGUAGE_CODES = {
+    "English": "en",
+    "Vietnamese": "vi",
+    "Japanese": "ja",  
+    "Chinese": "zh",
+    "Filipino": "fil",
+    "French": "fr",
+}
+
+input_lang = gr.Dropdown(
+    label = "Input Language", 
+    choices = list(LANGUAGE_CODES.keys()),
+    value = "English"
+)
+
+output_lang = gr.Dropdown(
+    label="Output Language", 
+    choices = list(LANGUAGE_CODES.keys()) ,
+    value = "Vietnamese"
+)
+
 
 demo = gr.Interface(
-    fn=voice_to_voice,
-    inputs=audio_input,
-    outputs=[gr.Audio(label="Japanese")]
+    fn = voice_to_voice,
+    inputs = [audio_input, input_lang, output_lang],
+    outputs = gr.Audio(label="Translated Speech"),
+    live = False
 )
 
 
