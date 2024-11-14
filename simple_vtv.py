@@ -7,6 +7,19 @@ import uuid
 from pathlib import Path
 
 
+aai.settings.api_key = "321a41e515c4454fb62a3af83c839ae2"   
+
+
+LANGUAGE_CODES = {
+    "English": "en",
+    "Vietnamese": "vi",
+    "Japanese": "ja",  
+    "Chinese": "zh",
+    "Filipino": "fil",
+    "French": "fr",
+}
+
+
 def voice_to_voice(audio_file, input_lang, output_lang):
     """
     Transcribes audio, translate itm and convert it to speech in a specified language
@@ -45,17 +58,15 @@ def audio_transcription(audio_file, lang_code="en"):
 
     Returns:
         str: Transcribed text from the audio file
-    """
-    aai.setting.api_key = ""
-    
+    """ 
     transcriber = aai.Transcriber()
     transcription = transcriber.transcribe(audio_file)
 
     return transcription
 
 
-def text_translation(text, from_lang="en", to_lang="ja"):
-    """Translate English text to Japanese
+def text_translation(text, from_lang="en", to_lang="vi"):
+    """Translate English text to 
 
     Args:
         text (str): Text to translate.
@@ -63,22 +74,22 @@ def text_translation(text, from_lang="en", to_lang="ja"):
         to_lang (str): Language code of the target language.
 
     Returns:
-        str: translateed text in Japanese
+        str: translated text in 
     """
     translator = Translator(from_lang=from_lang, to_lang=to_lang)
-    translator_text = translator.translate(text)
+    translated_text = translator.translate(text)
     
-    return translator_text
+    return translated_text
 
 
-def text_to_speech(text, lang_code="ja"):
+def text_to_speech(text, lang_code="vi"):
 
     client = ElevenLabs(
-        api_key = "",
+        api_key = "sk_fec23caeeba2e068597e50620a9a6b3e802e00cb5be8e07e"
     )
     
     response = client.text_to_speech.convert(
-        voice_id = "",
+        voice_id = "OwUh4nMbRCTtO20wxadu",
         optimize_streaming_latency = "0",
         output_format = "mp3_22050_32",
         text = text,
@@ -107,15 +118,6 @@ audio_input = gr.Audio(
     sources=["microphone"],
     type="filepath"
 )
-
-LANGUAGE_CODES = {
-    "English": "en",
-    "Vietnamese": "vi",
-    "Japanese": "ja",  
-    "Chinese": "zh",
-    "Filipino": "fil",
-    "French": "fr",
-}
 
 input_lang = gr.Dropdown(
     label = "Input Language", 
