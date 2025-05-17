@@ -1,3 +1,6 @@
-env/
+vtv-env/
 .gradio/
+
+ws.code-workspace
+
 *.mp3
