@@ -1,0 +1,14 @@
+name: v2v-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - gradio
+      - vosk
+      - argostranslate
+      - pyttsx3
+      - numpy
+      - scipy

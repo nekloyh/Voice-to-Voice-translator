@@ -1,5 +1,6 @@
-vtv-env/
+v2v-env/
 .gradio/
+models/
 
 ws.code-workspace
 
