@@ -7,7 +7,7 @@ import uuid
 from pathlib import Path
 
 
-aai.settings.api_key = "321a41e515c4454fb62a3af83c839ae2"   
+aai.settings.api_key = ""   
 
 
 LANGUAGE_CODES = {
@@ -85,7 +85,7 @@ def text_translation(text, from_lang="en", to_lang="vi"):
 def text_to_speech(text, lang_code="vi"):
 
     client = ElevenLabs(
-        api_key = "sk_fec23caeeba2e068597e50620a9a6b3e802e00cb5be8e07e"
+        api_key = ""
     )
     
     response = client.text_to_speech.convert(

@@ -1,7 +1,10 @@
 v2v-env/
 .gradio/
-models/
+
+models/vosk-model-*/
 
 ws.code-workspace
 
 *.mp3
+*.wav
+*.txt
