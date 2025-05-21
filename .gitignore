@@ -4,6 +4,7 @@ v2v-env/
 models/vosk-model-*/
 
 ws.code-workspace
+**/__pycache__/
 
 *.mp3
 *.wav
